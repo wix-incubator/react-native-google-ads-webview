@@ -12,8 +12,11 @@ const LINKING_ERROR =
   '- You are not using Expo Go\n';
 
 type GoogleAdsWebviewProps = {
-  color: string;
-  style: ViewStyle;
+  adHost: string;
+  adClient: string;
+  adSlot: string;
+  pageUrl: string;
+  style?: ViewStyle;
 };
 
 const ComponentName = 'GoogleAdsWebviewView';
