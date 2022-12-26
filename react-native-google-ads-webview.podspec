@@ -14,7 +14,7 @@ Pod::Spec.new do |s|
   s.platforms    = { :ios => "11.0" }
   s.source       = { :git => "https://github.com/shahardavid/react-native-google-ads-webview.git", :tag => "#{s.version}" }
 
-  s.source_files = "ios/**/*.{h,m,mm}"
+  s.source_files = "ios/**/*.{h,m,mm,swift}"
 
   s.dependency "React-Core"
 
