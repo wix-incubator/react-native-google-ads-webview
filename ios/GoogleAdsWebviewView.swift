@@ -1,7 +1,8 @@
 import UIKit
 import WebKit
+import GoogleMobileAds
 
-class GoogleAdsWebviewView : UIView {
+class GoogleAdsWebviewView : UIView, WKNavigationDelegate {
     @objc var webView: WKWebView!
     @objc var adHost: String!
     @objc var adSlot: String!
@@ -23,19 +24,19 @@ class GoogleAdsWebviewView : UIView {
     }
     
     override func didSetProps(_ changedProps: [String]!) {
-        let myURL = URL(string: self.pageUrl)
+                let myURL = URL(string: "https://webview-api-for-ads-test.glitch.me/")
+//        let myURL = URL(string: self.pageUrl)
         let myRequest = URLRequest(url: myURL!)
         webView.load(myRequest)
     }
     
     private func setupView() {
-        let myURL = URL(string:"https://www.apple.com")
-        let myRequest = URLRequest(url: myURL!)
-        
         webView = WKWebView()
-        webView.load(myRequest)
+        webView.navigationDelegate = self;
         
         self.addSubview(webView)
+        
+        GADMobileAds.sharedInstance().register(webView)
     }
     
     
