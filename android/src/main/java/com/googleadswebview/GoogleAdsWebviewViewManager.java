@@ -61,7 +61,6 @@ public class GoogleAdsWebviewViewManager extends SimpleViewManager<WebView> {
     String data = "<body style=\"margin: 0;\">" + "<script async\n" +
       "src=\"https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js\"\n" +
       "crossorigin=\"anonymous\"></script>\n" +
-      "<!-- Testing parent ad unit reporting -->\n" +
       "<ins class=\"adsbygoogle\"\n" +
       "style=\"display:inline-block;width:100%;height:100%;\"\n" +
       "data-ad-client=" + this.adClient + "\n" +

@@ -24,10 +24,29 @@ class GoogleAdsWebviewView : UIView, WKNavigationDelegate {
     }
     
     override func didSetProps(_ changedProps: [String]!) {
-                let myURL = URL(string: "https://webview-api-for-ads-test.glitch.me/")
-//        let myURL = URL(string: self.pageUrl)
-        let myRequest = URLRequest(url: myURL!)
-        webView.load(myRequest)
+
+        let adScriptSring = """
+        <head>
+        <meta name='viewport' content='width=device-width, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0, user-scalable=no'>
+        </head>
+        <body style="margin: 0;">
+        <script async
+        src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"
+        crossorigin="anonymous"></script>
+        <ins class="adsbygoogle"
+        style="display:inline-block;width:100%;height:100%;"
+        data-ad-client="\(self.adClient!)"
+        data-ad-host="\(self.adHost!)"
+        data-page-url="\(self.pageUrl!)"
+        data-ad-slot="\(self.adSlot!)"></ins>
+        <script>
+        (adsbygoogle = window.adsbygoogle || []).push({});
+        </script>
+        <body>
+"""
+        
+        let baseURL = URL(string: self.pageUrl)
+        webView.loadHTMLString(adScriptSring, baseURL: baseURL)
     }
     
     private func setupView() {
