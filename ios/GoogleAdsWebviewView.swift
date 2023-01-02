@@ -24,7 +24,7 @@ class GoogleAdsWebviewView : UIView, WKNavigationDelegate {
     }
     
     override func didSetProps(_ changedProps: [String]!) {
-
+        
         let adScriptSring = """
         <head>
         <meta name='viewport' content='width=device-width, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0, user-scalable=no'>
@@ -58,6 +58,22 @@ class GoogleAdsWebviewView : UIView, WKNavigationDelegate {
         GADMobileAds.sharedInstance().register(webView)
     }
     
-    
-    
+    func webView(_ webView: WKWebView, decidePolicyFor navigationAction: WKNavigationAction, decisionHandler: @escaping (WKNavigationActionPolicy) -> Void) {
+        
+        if (navigationAction.navigationType != WKNavigationType.linkActivated){
+            decisionHandler(.allow)
+            return;
+        }
+        
+        guard let url = navigationAction.request.url else {
+            decisionHandler(.allow)
+            return
+        }
+        
+        decisionHandler(.cancel)
+        DispatchQueue.main.async {
+            UIApplication.shared.open(url)
+        }
+    }
 }
+
