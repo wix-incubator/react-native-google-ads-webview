@@ -16,6 +16,7 @@ type GoogleAdsWebviewProps = {
   adClient: string;
   adSlot: string;
   pageUrl: string;
+  onUnfilledAd?: () => void;
   style?: ViewStyle;
 };
 
