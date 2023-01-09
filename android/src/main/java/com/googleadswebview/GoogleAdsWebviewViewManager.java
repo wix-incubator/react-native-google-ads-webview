@@ -35,6 +35,7 @@ public class GoogleAdsWebviewViewManager extends SimpleViewManager<WebView> {
   @NonNull
   public WebView createViewInstance(ThemedReactContext reactContext) {
     WebView webView = new WebView(reactContext);
+    webView.setWebViewClient(new GoogleAdsWebViewClient());
     WebView.setWebContentsDebuggingEnabled(true);
     webView.getSettings().setJavaScriptEnabled(true);
     webView.addJavascriptInterface(new JSBridge(reactContext, webView), "JSBridge");
@@ -97,6 +98,7 @@ public class GoogleAdsWebviewViewManager extends SimpleViewManager<WebView> {
       "observer.observe(adInsNode, config);\n" +
       "</script>" +
       "</body>";
+
     webView.loadDataWithBaseURL(this.pageUrl, data, "text/html", "UTF-8", null);
   }
 
