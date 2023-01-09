@@ -1,14 +1,21 @@
 package com.googleadswebview;
 
-import android.webkit.CookieManager;
+import android.webkit.JavascriptInterface;
 import android.webkit.WebView;
 
 import androidx.annotation.NonNull;
 
+import com.facebook.react.bridge.Arguments;
+import com.facebook.react.bridge.WritableMap;
+import com.facebook.react.common.MapBuilder;
 import com.facebook.react.uimanager.SimpleViewManager;
 import com.facebook.react.uimanager.ThemedReactContext;
 import com.facebook.react.uimanager.annotations.ReactProp;
+import com.facebook.react.uimanager.events.RCTEventEmitter;
 import com.google.android.gms.ads.MobileAds;
+
+
+import java.util.Map;
 
 public class GoogleAdsWebviewViewManager extends SimpleViewManager<WebView> {
   public static final String REACT_CLASS = "GoogleAdsWebviewView";
@@ -30,6 +37,7 @@ public class GoogleAdsWebviewViewManager extends SimpleViewManager<WebView> {
     WebView webView = new WebView(reactContext);
     WebView.setWebContentsDebuggingEnabled(true);
     webView.getSettings().setJavaScriptEnabled(true);
+    webView.addJavascriptInterface(new JSBridge(reactContext, webView), "JSBridge");
 
     MobileAds.registerWebView(webView);
     return webView;
@@ -69,8 +77,58 @@ public class GoogleAdsWebviewViewManager extends SimpleViewManager<WebView> {
       "data-ad-slot=" + this.adSlot + "></ins>\n" +
       "<script>\n" +
       "(adsbygoogle = window.adsbygoogle || []).push({});\n" +
-      "</script>\n" +
+      // handle unfilled ad
+      "const callback = (mutationList, observer) => {\n" +
+      "for (const mutation of mutationList) {\n" +
+      "  if (mutation.type === 'attributes') {\n" +
+      "    if (mutation.attributeName === 'data-ad-status') {\n" +
+      "      const adStatus = mutation.target.getAttribute('data-ad-status');\n" +
+      "      if (adStatus === 'unfilled') {\n" +
+      "        JSBridge.postMessage('unfilled')\n" +
+      "      }\n" +
+      "    }\n" +
+      "  }\n" +
+      "}\n" +
+      "};\n" +
+      "\n" +
+      "const observer = new MutationObserver(callback);\n" +
+      "const adInsNode = document.getElementsByClassName('adsbygoogle')[0];\n" +
+      "const config = { attributes: true };\n" +
+      "observer.observe(adInsNode, config);\n" +
+      "</script>" +
       "</body>";
     webView.loadDataWithBaseURL(this.pageUrl, data, "text/html", "UTF-8", null);
+  }
+
+  @Override
+  public Map getExportedCustomBubblingEventTypeConstants() {
+    return MapBuilder.builder().put(
+      "onUnfilledAd",
+      MapBuilder.of(
+        "phasedRegistrationNames",
+        MapBuilder.of("bubbled", "onUnfilledAd")
+      )
+    ).build();
+  }
+
+  class JSBridge {
+    ThemedReactContext reactContext;
+    WebView webview;
+
+    public JSBridge(ThemedReactContext reactContext, WebView webview){
+      this.reactContext = reactContext;
+      this.webview = webview;
+    }
+
+    @JavascriptInterface
+    public boolean postMessage(String message) {
+        if (message.equals("unfilled")){
+          this.reactContext
+            .getJSModule(RCTEventEmitter.class)
+            .receiveEvent(this.webview.getId(), "onUnfilledAd", null);
+        }
+
+        return false;
+    }
   }
 }
