@@ -1,6 +1,6 @@
 # react-native-google-ads-webview
 
-react-native-google-ads-webview
+React Native component for WebView API for [Google AdSense Ads](https://support.google.com/admanager/answer/11893859).
 
 ![](example/examle.png)
 
