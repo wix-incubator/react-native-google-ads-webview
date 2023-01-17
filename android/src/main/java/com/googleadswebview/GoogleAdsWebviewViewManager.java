@@ -52,20 +52,29 @@ public class GoogleAdsWebviewViewManager extends SimpleViewManager<WebView> {
     this.adClient = adClient;
   }
 
-  @ReactProp(name = "adSlot")
-  public void adSlot(WebView webview, String adSlot) {
-    this.adSlot = adSlot;
-  }
-
   @ReactProp(name = "pageUrl")
   public void pageUrl(WebView webview, String pageUrl) {
     this.pageUrl = pageUrl;
   }
 
+  @ReactProp(name = "adSlot")
+  public void adSlot(WebView webview, String adSlot) {
+    this.adSlot = adSlot;
+  }
+
   @Override
   protected void onAfterUpdateTransaction(@NonNull WebView webView) {
     super.onAfterUpdateTransaction(webView);
-    String data = "<body style=\"margin: 0;\">" + "<script async\n" +
+    boolean isSetAllRequiredProps = this.adHost != null && this.adClient != null && this.pageUrl != null;
+
+    if (isSetAllRequiredProps) {
+      String adScriptString = prepareAdWebViewScriptString();
+      webView.loadDataWithBaseURL(this.pageUrl, adScriptString, "text/html", "UTF-8", null);
+    }
+  }
+
+  private String prepareAdWebViewScriptString(){
+    return "<body style=\"margin: 0;\">" + "<script async\n" +
       "src=\"https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js\"\n" +
       "crossorigin=\"anonymous\"></script>\n" +
       "<ins class=\"adsbygoogle\"\n" +
@@ -97,8 +106,6 @@ public class GoogleAdsWebviewViewManager extends SimpleViewManager<WebView> {
       "observer.observe(adInsNode, config);\n" +
       "</script>" +
       "</body>";
-
-    webView.loadDataWithBaseURL(this.pageUrl, data, "text/html", "UTF-8", null);
   }
 
   @Override
@@ -123,13 +130,13 @@ public class GoogleAdsWebviewViewManager extends SimpleViewManager<WebView> {
 
     @JavascriptInterface
     public boolean postMessage(String message) {
-        if (message.equals("unfilled")){
-          this.reactContext
-            .getJSModule(RCTEventEmitter.class)
-            .receiveEvent(this.webview.getId(), "onUnfilledAd", null);
-        }
+      if (message.equals("unfilled")){
+        this.reactContext
+          .getJSModule(RCTEventEmitter.class)
+          .receiveEvent(this.webview.getId(), "onUnfilledAd", null);
+      }
 
-        return false;
+      return false;
     }
   }
 }

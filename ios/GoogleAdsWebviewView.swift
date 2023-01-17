@@ -25,9 +25,13 @@ class GoogleAdsWebviewView : UIView, WKNavigationDelegate, WKScriptMessageHandle
     }
     
     override func didSetProps(_ changedProps: [String]!) {
-        let adScriptSring = prepareAdWebViewScriptString()
-        let baseURL = URL(string: self.pageUrl)
-        webView.loadHTMLString(adScriptSring, baseURL: baseURL)
+        let isSetAllRequiredProps = self.adHost != nil && self.adClient != nil && self.pageUrl != nil;
+        
+        if (isSetAllRequiredProps){
+            let adScriptString = prepareAdWebViewScriptString()
+            let baseURL = URL(string: self.pageUrl)
+            webView.loadHTMLString(adScriptString, baseURL: baseURL)
+        }
     }
     
     private func prepareAdWebViewScriptString() -> String {
