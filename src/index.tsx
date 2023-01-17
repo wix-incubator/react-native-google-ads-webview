@@ -14,8 +14,8 @@ const LINKING_ERROR =
 type GoogleAdsWebviewProps = {
   adHost: string;
   adClient: string;
-  adSlot: string;
   pageUrl: string;
+  adSlot?: string;
   onUnfilledAd?: () => void;
   style?: ViewStyle;
 };

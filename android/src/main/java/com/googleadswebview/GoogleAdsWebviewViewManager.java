@@ -5,15 +5,13 @@ import android.webkit.WebView;
 
 import androidx.annotation.NonNull;
 
-import com.facebook.react.bridge.Arguments;
-import com.facebook.react.bridge.WritableMap;
 import com.facebook.react.common.MapBuilder;
 import com.facebook.react.uimanager.SimpleViewManager;
 import com.facebook.react.uimanager.ThemedReactContext;
 import com.facebook.react.uimanager.annotations.ReactProp;
 import com.facebook.react.uimanager.events.RCTEventEmitter;
-import com.google.android.gms.ads.MobileAds;
 
+import com.google.android.gms.ads.MobileAds;
 
 import java.util.Map;
 
@@ -75,7 +73,8 @@ public class GoogleAdsWebviewViewManager extends SimpleViewManager<WebView> {
       "data-ad-client=" + this.adClient + "\n" +
       "data-ad-host=" + this.adHost + "\n" +
       "data-page-url=" + this.pageUrl + "\n" +
-      "data-ad-slot=" + this.adSlot + "></ins>\n" +
+      ( this.adSlot != null? "data-ad-slot=" + this.adSlot : "") +
+      "></ins>\n" +
       "<script>\n" +
       "(adsbygoogle = window.adsbygoogle || []).push({});\n" +
       // handle unfilled ad

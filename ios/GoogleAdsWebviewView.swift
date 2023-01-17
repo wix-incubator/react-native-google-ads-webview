@@ -44,7 +44,7 @@ class GoogleAdsWebviewView : UIView, WKNavigationDelegate, WKScriptMessageHandle
                 data-ad-client="\(self.adClient!)"
                 data-ad-host="\(self.adHost!)"
                 data-page-url="\(self.pageUrl!)"
-                data-ad-slot="\(self.adSlot!)"></ins>
+                \((self.adSlot != nil) ? "data-ad-slot=\"" + self.adSlot : "")"></ins>
                 <script>
                 (adsbygoogle = window.adsbygoogle || []).push({});
         
