@@ -41,13 +41,13 @@
     "ios",
     "android"
   ],
-  "repository": "https://github.com/shahardavid/react-native-google-ads-webview",
+  "repository": "https://github.com/wix-incubator/react-native-google-ads-webview",
   "author": "Shahar David <shahard333@gmail.com> (https://github.com/shahardavid)",
   "license": "MIT",
   "bugs": {
-    "url": "https://github.com/shahardavid/react-native-google-ads-webview/issues"
+    "url": "https://github.com/wix-incubator/react-native-google-ads-webview/issues"
   },
-  "homepage": "https://github.com/shahardavid/react-native-google-ads-webview#readme",
+  "homepage": "https://github.com/wix-incubator/react-native-google-ads-webview#readme",
   "publishConfig": {
     "registry": "https://registry.npmjs.org/"
   },
